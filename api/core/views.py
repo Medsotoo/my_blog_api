@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import viewsets,permissions,pagination,generics
-from .serializers import PostSerializer, TagSerializer
+from .serializers import PostSerializer, TagSerializer, ContactSerailizer
 from .models import Post
 from rest_framework.response import Response        
 from taggit.models import Tag
+from rest_framework.views import APIView
+from django.core.mail import send_mail
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -39,6 +41,26 @@ class AsideView(generics.ListAPIView):
     queryset = Post.objects.all().order_by('-id')[:5]
     serializer_class = PostSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class FeedBackView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ContactSerailizer
+
+    def post(self, request, *args, **kwargs):
+        serializer_class = ContactSerailizer(data=request.data)
+        if serializer_class.is_valid():
+            data = serializer_class.validated_data
+            name = data.get('name')
+            from_email = data.get('email')
+            subject = data.get('subject')
+            message = data.get('message')
+            send_mail(f'from {name} | {subject}', message, from_email, ['example.example1928@gmail.com'])
+            return Response({"success": "Sent"})
+        
+
+
+
 
     
 
