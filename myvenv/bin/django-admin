@@ -1,4 +1,4 @@
-#!/mnt/c/Users/sergey/Desktop/my_drf_blog/myvenv/bin/python3
+#!/Users/sergeypalchikov/Desktop/my_blog_api/myvenv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys

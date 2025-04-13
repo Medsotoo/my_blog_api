@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'taggit',
     'taggit_serializer',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 # ниже настройки JWT токена

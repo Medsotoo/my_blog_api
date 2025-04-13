@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from .models import Post
-from taggit_serializer.serializers import TagListSerializerField, TaggitSerializer
 from django.contrib.auth.models import User
+from taggit.models import Tag
+from .models import Post
 
-
-class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
-
-    tags = TagListSerializerField()
+class PostSerializer(serializers.ModelSerializer):
+    # Переписанный способ работы с тегами
+    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects.all(), many=True)
     author = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 
     class Meta:
