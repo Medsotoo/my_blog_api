@@ -16,7 +16,7 @@ class PageNumberSetPagination(pagination.PageNumberPagination):
 
 class PostViewSet(viewsets.ModelViewSet):
     search_fields = ['content','h1']
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter,) # запрос на поиск выглядит так, добавляются квери параметры http://localhost:8000/api/posts/?search=геологии
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     lookup_field = 'slug'
