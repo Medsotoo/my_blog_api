@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets,permissions,pagination,generics,filters
-from .serializers import PostSerializer, TagSerializer, ContactSerailizer, RegisterSerializer, UserSerializer
+from .serializers import PostSerializer, TagSerializer, ContactSerailizer, RegisterSerializer, UserSerializer, CommentSerializer
 from .models import Post
 from rest_framework.response import Response        
 from taggit.models import Tag
@@ -85,6 +85,18 @@ class ProfileView(generics.GenericAPIView):
             "user": UserSerializer(request.user, context=self.get_serializer_context()).data,
         })
 
+class CommentView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CommentSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        text = serializer.save()
+        return Response({
+            'comment': CommentSerializer(text, context=self.get_serializer_context()).data,
+            'massage': 'коммент успешно создан'
+        })
 
     
 
