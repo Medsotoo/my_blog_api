@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets,permissions,pagination,generics,filters
 from .serializers import PostSerializer, TagSerializer, ContactSerailizer, RegisterSerializer, UserSerializer, CommentSerializer
-from .models import Post
+from .models import Post, Comment
 from rest_framework.response import Response        
 from taggit.models import Tag
 from rest_framework.views import APIView
@@ -97,8 +97,15 @@ class CommentView(generics.GenericAPIView):
             'comment': CommentSerializer(text, context=self.get_serializer_context()).data,
             'massage': 'коммент успешно создан'
         })
-
-    
+    def get(self, request, post_slug):
+        try:
+            post = Post.objects.get(slug=post_slug)
+        except Post.DoesNotExist:
+            return Response({"error": "Пост не найден"}, status=404)
+        
+        comments = Comment.objects.filter(post=post).order_by('-create_date')
+        serializer = self.get_serializer(comments, many=True)
+        return Response(serializer.data)
 
 
 
